@@ -1,0 +1,216 @@
+/* ========== FONT & RESET ========== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #f7f9fc;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== NAVBAR ========== */
+nav {
+  background: #4a6cf7;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 0.8rem;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+nav a:hover {
+  opacity: 0.8;
+}
+
+#btn-install {
+  background: white;
+  color: #4a6cf7;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#btn-install:hover {
+  background: #f0f0f0;
+}
+
+/* ========== MAIN CONTAINER ========== */
+main {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ========== FORM STYLING (Login, Register, Add Story) ========== */
+form {
+  background: #fff;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+form h2 {
+  text-align: center;
+  color: #4a6cf7;
+  margin-bottom: 0.5rem;
+}
+
+form label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #444;
+}
+
+form input,
+form textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+form input:focus,
+form textarea:focus {
+  border-color: #4a6cf7;
+}
+
+form button {
+  background: #4a6cf7;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+form button:hover {
+  background: #3d5be8;
+}
+
+/* ========== STORY LIST ========== */
+#story-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.story-item {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.story-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.story-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.story-item h3 {
+  margin: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.story-item p {
+  margin: 0 1rem 1rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.story-item small {
+  display: block;
+  margin: 0 1rem 1rem;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* Buttons for Offline Save/Delete */
+.story-item button {
+  margin: 0 0.5rem 1rem;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.btn-save-offline {
+  background: #4a6cf7;
+  color: white;
+}
+
+.btn-save-offline:hover {
+  background: #3c5dd9;
+}
+
+.btn-delete-local {
+  background: #ff5252;
+  color: white;
+}
+
+.btn-delete-local:hover {
+  background: #e04141;
+}
+
+/* ========== MAP SECTION ========== */
+#map {
+  width: 100%;
+  max-width: 1000px;
+  height: 400px;
+  border-radius: 12px;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 600px) {
+  form {
+    padding: 1.5rem;
+  }
+
+  #story-list {
+    grid-template-columns: 1fr;
+  }
+}

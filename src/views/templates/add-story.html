@@ -1,0 +1,24 @@
+<div class="add-story-container">
+  <h2>Tambah Cerita Baru</h2>
+  <form id="add-story-form">
+    <div class="camera-container">
+      <video id="camera-feed" autoplay playsinline></video>
+      <canvas id="photo-canvas" class="hidden"></canvas>
+      <img id="photo-preview" class="hidden" alt="Pratinjau gambar yang diambil">
+    </div>
+    <button type="button" id="capture-button">Ambil Gambar</button>
+    
+    <div class="form-group">
+      <label for="story-description">Deskripsi</label>
+      <textarea id="story-description" rows="4" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Pilih Lokasi (Klik pada Peta)</label>
+      <div id="map" style="height: 300px; width: 100%;"></div>
+      <input type="text" id="story-location" readonly placeholder="Koordinat akan muncul di sini">
+    </div>
+
+    <button type="submit">Unggah Cerita</button>
+  </form>
+</div>
