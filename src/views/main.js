@@ -57,7 +57,7 @@ document.addEventListener('click', async (e) => {
 async function registerSWAndPush() {
   if (!('serviceWorker' in navigator)) return;
 
-  const swReg = await navigator.serviceWorker.register('/sw.js');
+  const swReg = await navigator.serviceWorker.register('./sw.js');
 
   const permission = await Notification.requestPermission();
   if (permission !== 'granted') return;
