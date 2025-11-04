@@ -27,7 +27,7 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: './dist',
+    static: './docs',
     open: true,
     port: 3000,
   },
