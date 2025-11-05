@@ -70,6 +70,22 @@ nav a:hover {
   outline: 2px solid #4a6cf7;
 }
 
+/* ========== Push Notification ========== */
+#btn-subscribe, #btn-unsubscribe {
+  background: white;
+  color: #4a6cf7;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 1rem;
+}
+
+#btn-subscribe:hover, #btn-unsubscribe:hover {
+  background: #f0f0f0;
+}
+
 /* ========== MAIN CONTAINER ========== */
 main {
   flex: 1;

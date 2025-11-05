@@ -63,38 +63,90 @@ async function registerSWAndPush() {
   const swReg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
 
   const permission = await Notification.requestPermission();
-  if (permission !== 'granted') return;
+  if (permission !== 'granted') {
+    alert('Izin notifikasi ditolak. Aktifkan notifikasi agar update story bisa diterima.');
+    return;
+  }
 
   const applicationServerKey = urlBase64ToUint8Array(
     'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk'
   );
 
-  const subscription = await swReg.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey,
+  const token = localStorage.getItem('authToken');
+  const btnSub = document.getElementById('btn-subscribe');
+  const btnUnsub = document.getElementById('btn-unsubscribe');
+
+  const existing = await swReg.pushManager.getSubscription();
+  if (existing) {
+    btnSub.style.display = 'none';
+    btnUnsub.style.display = 'inline-block';
+  } else {
+    btnSub.style.display = 'inline-block';
+    btnUnsub.style.display = 'none';
+  }
+
+  btnSub.addEventListener('click', async () => {
+    try {
+      const subscription = await swReg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey,
+      });
+
+      const subData = subscription.toJSON();
+      const body = {
+        endpoint: subscription.endpoint,
+        keys: {
+          p256dh: subData.keys.p256dh,
+          auth: subData.keys.auth,
+        },
+      };
+
+      if (!token) {
+        alert('Silakan login terlebih dahulu sebelum berlangganan notifikasi.');
+        return;
+      }
+
+      const response = await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        alert('Berhasil berlangganan notifikasi!');
+        btnSub.style.display = 'none';
+        btnUnsub.style.display = 'inline-block';
+      } else {
+        alert('Gagal berlangganan notifikasi!');
+      }
+    } catch (err) {
+      console.error('Subscribe error:', err);
+    }
   });
 
-  const json = subscription.toJSON();
+  btnUnsub.addEventListener('click', async () => {
+    const sub = await swReg.pushManager.getSubscription();
+    if (!sub) return;
 
-  const body = {
-    endpoint: subscription.endpoint,
-    keys: {
-      p256dh: json.keys.p256dh,
-      auth: json.keys.auth,
-    },
-  };
+    await sub.unsubscribe();
+    if (!token) return;
 
-  const token = localStorage.getItem('authToken');
-  if (token) {
     await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ endpoint: sub.endpoint }),
     });
-  }
+
+    alert('Notifikasi berhasil dihentikan.');
+    btnSub.style.display = 'inline-block';
+    btnUnsub.style.display = 'none';
+  });
 }
 
 function urlBase64ToUint8Array(base64String) {

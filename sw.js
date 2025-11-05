@@ -72,3 +72,35 @@ self.addEventListener('fetch', (event) => {
     return cached || netPromise;
   })());
 });
+
+self.addEventListener('push', (event) => {
+  console.log('Service Worker menerima push notification');
+
+  if (!event.data) return;
+
+  const data = event.data.json();
+  const title = data.title || 'Story baru dari Story App';
+  const options = {
+    body: data.options?.body || 'Ada cerita baru! Yuk cek sekarang.',
+    icon: data.options?.icon || '/icons/icon-192.png',
+    badge: data.options?.badge || '/icons/icon-192.png',
+    data: {
+      url: '/#/home',
+    },
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then((clientsArr) => {
+      const hadWindow = clientsArr.find((c) => c.url.includes('/#/home') && 'focus' in c);
+      if (hadWindow) return hadWindow.focus();
+      if (clients.openWindow) return clients.openWindow('/#/home');
+    })
+  );
+});
