@@ -1,11 +1,14 @@
 const APP_CACHE = 'app-shell-v1';
 const RUNTIME_CACHE = 'runtime-v1';
+
+const BASE = (self.registration?.scope || '/').replace(location.origin, '');
+
 const APP_SHELL = [
-  '/', '/index.html', '/bundle.js',
+  `${BASE}`, `${BASE}index.html`, `${BASE}bundle.js`,
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-  '/manifest.webmanifest',
-  '/icons/icon-192.png', '/icons/icon-512.png',
+  `${BASE}manifest.webmanifest`,
+  `${BASE}icons/icon-192.png`, `${BASE}icons/icon-512.png`,
 ];
 
 self.addEventListener('install', (event) => {
@@ -26,11 +29,9 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-
   if (request.method !== 'GET') return;
 
-  const isStories = request.url.includes('/v1/stories');
-  if (isStories) {
+  if (request.url.includes('/v1/stories')) {
     event.respondWith((async () => {
       try {
         const net = await fetch(request);
@@ -51,11 +52,11 @@ self.addEventListener('fetch', (event) => {
       try {
         const net = await fetch(request);
         const cache = await caches.open(APP_CACHE);
-        cache.put('/', net.clone());
+        cache.put(`${BASE}`, net.clone());
         return net;
       } catch {
         const cache = await caches.open(APP_CACHE);
-        return cache.match('/index.html');
+        return (await cache.match(`${BASE}index.html`)) || (await cache.match('index.html'));
       }
     })());
     return;
@@ -69,31 +70,5 @@ self.addEventListener('fetch', (event) => {
       return resp;
     }).catch(() => cached);
     return cached || netPromise;
-  })());
-});
-
-
-self.addEventListener('push', (event) => {
-  let payload = {};
-  try { payload = event.data ? event.data.json() : {}; } catch { payload = {}; }
-
-  const title = payload.title || 'Story berhasil dibuat';
-  const options = payload.options || { body: 'Story baru berhasil dibuat.' };
-
-  event.waitUntil(self.registration.showNotification(title, {
-    ...options,
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-192.png',
-  }));
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil((async () => {
-    const all = await clients.matchAll({ type: 'window' });
-    for (const c of all) {
-      if ('focus' in c) { c.focus(); return; }
-    }
-    if (clients.openWindow) clients.openWindow('/#/home');
   })());
 });

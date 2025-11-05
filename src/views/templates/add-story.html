@@ -6,15 +6,21 @@
       <canvas id="photo-canvas" class="hidden"></canvas>
       <img id="photo-preview" class="hidden" alt="Pratinjau gambar yang diambil">
     </div>
+
     <button type="button" id="capture-button">Ambil Gambar</button>
-    
+
     <div class="form-group">
       <label for="story-description">Deskripsi</label>
       <textarea id="story-description" rows="4" required></textarea>
     </div>
 
     <div class="form-group">
-      <label>Pilih Lokasi (Klik pada Peta)</label>
+      <label for="story-photo">Upload Foto (opsional jika tidak ambil kamera)</label>
+      <input type="file" id="story-photo" name="photo" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label for="story-location">Pilih Lokasi (Klik pada Peta)</label>
       <div id="map" style="height: 300px; width: 100%;"></div>
       <input type="text" id="story-location" readonly placeholder="Koordinat akan muncul di sini">
     </div>

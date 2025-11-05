@@ -26,11 +26,13 @@ class HomePresenter {
 
       this._view.renderStoryList(stories);
       this._view.renderMap(stories);
+      await this._view.bindOfflineButtons();
     } catch (error) {
       const cached = await getAllStoriesIDB();
       if (cached.length) {
         this._view.renderStoryList(cached);
         this._view.renderMap(cached);
+        await this._view.bindOfflineButtons();
       } else {
         this._view.showError(
           `Gagal memuat cerita: ${error.message}. Mungkin sesi Anda telah berakhir, silakan <a href="#/login">login kembali</a>.`

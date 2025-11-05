@@ -57,22 +57,29 @@ class AddStoryView {
     }
   }
 
-  getStoryInput() {
-    const description = document.querySelector('#story-description').value;
-    if (!this._photo || !description) {
-      this.showError('Deskripsi dan foto tidak boleh kosong!');
-      return null;
-    }
-    const formData = new FormData();
-    formData.append('photo', this._photo);
-    formData.append('description', description);
-    if (this._latitude && this._longitude) {
-      formData.append('lat', this._latitude);
-      formData.append('lon', this._longitude);
-    }
-    return formData;
+getStoryInput() {
+  const description = document.querySelector('#story-description').value;
+  const fileInput = document.querySelector('#story-photo');
+  const file = fileInput?.files?.[0];
+
+  const photo = this._photo || file;
+
+  if (!photo || !description) {
+    this.showError('Deskripsi dan foto tidak boleh kosong!');
+    return null;
   }
-  
+
+  const formData = new FormData();
+  formData.append('photo', photo);
+  formData.append('description', description);
+
+  if (this._latitude && this._longitude) {
+    formData.append('lat', this._latitude);
+    formData.append('lon', this._longitude);
+  }
+
+  return formData;
+}
   setOnSubmit(callback) {
     document.querySelector('#capture-button').addEventListener('click', () => this._capturePhoto());
     document.querySelector('#add-story-form').addEventListener('submit', (event) => {

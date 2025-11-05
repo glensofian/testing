@@ -4,6 +4,8 @@ import HomePresenter from '../presenters/home-presenter';
 import LoginPresenter from '../presenters/login-presenter';
 import RegisterPresenter from '../presenters/register-presenter';
 import AddStoryPresenter from '../presenters/add-story-presenter';
+import SavedPresenter from '../presenters/saved-presenter';
+import StoryModel from '../models/story-model';
 
 const routes = {
   '/': HomePresenter,
@@ -11,6 +13,7 @@ const routes = {
   '/login': LoginPresenter,
   '/register': RegisterPresenter,
   '/add-story': AddStoryPresenter,
+  '/saved': SavedPresenter, 
 };
 
 const router = new Router(document.querySelector('#main-content'), routes);
@@ -106,4 +109,23 @@ function urlBase64ToUint8Array(base64String) {
 
 window.addEventListener('load', () => {
   registerSWAndPush().catch(console.error);
+});
+
+function updateAuthUI() {
+  const loggedIn = !!localStorage.getItem('authToken');
+  const logout = document.getElementById('link-logout');
+  const saved  = document.getElementById('link-saved');
+  if (logout) logout.style.display = loggedIn ? 'inline' : 'none';
+  if (saved)  saved.style.display  = loggedIn ? 'inline' : 'none';
+}
+window.addEventListener('hashchange', updateAuthUI);
+window.addEventListener('load', updateAuthUI);
+
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'link-logout') {
+    e.preventDefault();
+    StoryModel.removeAuthToken();
+    location.hash = '#/login';
+    updateAuthUI();
+  }
 });

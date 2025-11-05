@@ -53,6 +53,23 @@ nav a:hover {
   background: #f0f0f0;
 }
 
+/* ========== SKIP LINK ========== */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: #fff;
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 1000;
+}
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+  outline: 2px solid #4a6cf7;
+}
+
 /* ========== MAIN CONTAINER ========== */
 main {
   flex: 1;
