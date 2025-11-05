@@ -22,7 +22,6 @@ class HomePresenter {
     try {
       const stories = await StoryModel.getAllStories();
 
-      await putStories(stories);
 
       this._view.renderStoryList(stories);
       this._view.renderMap(stories);

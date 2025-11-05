@@ -78,9 +78,10 @@ async function registerSWAndPush() {
 
   const body = {
     endpoint: subscription.endpoint,
-    keys: json.keys,
-    p256dh: json.keys.p256dh,
-    auth: json.keys.auth,
+    keys: {
+      p256dh: json.keys.p256dh,
+      auth: json.keys.auth,
+    },
   };
 
   const token = localStorage.getItem('authToken');
